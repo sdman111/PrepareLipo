@@ -6,7 +6,7 @@ class Xcode
   end
 
   def process
-    project = Xcodeproj::Project.open("/Users/wuwenqiu/PrepareLipo/AutoPack/Example/AutoPack.xcodeproj")
+    project = Xcodeproj::Project.open("/Users/wuzhiying/PrepareLipo/AutoPack/Example/AutoPack.xcodeproj")
     project_name = File.basename(project.path,".xcodeproj")
     process_binary_target(project, project_name)
     process_aggregate_target(project, project_name)
@@ -47,7 +47,7 @@ class Xcode
     # 设置Build Phase,添加Run Script
     aggregate_target.new_shell_script_build_phase("Run build.sh Script")
     # 初始化build.sh
-    write_shell(project_name + "Binary")
+    write_shell(project, project_name + "Binary")
     # 设置shell_script内容
     aggregate_target.shell_script_build_phases.first.shell_script = "sh ../build.sh"
   end
@@ -78,14 +78,28 @@ class Xcode
   end
 
   # 初始化打包shell脚本内容
-  def write_shell(target_name)
+  def write_shell(project, target_name)
     # 打开组件主目录
-
+    dir_name = project.project_dir.parent
     # 新建shell脚本
-
+    puts dir_name.join("build.sh")
+    build_sh = File.new(dir_name.join("build.sh"),"w+")
     # 写入打包代码
+    if build_sh
+      build_sh.syswrite("")
+    else
+      puts "新建/打开build.sh失败"
+    end
   end
 
+end
+
+class Shell
+  def Shell.content
+    content = %/
+
+    /
+  end
 end
 
 Xcode.new().process
