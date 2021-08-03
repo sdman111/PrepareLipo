@@ -46,8 +46,10 @@ class Xcode
     aggregate_target = project.new_aggregate_target(target_name)
     # 设置Build Phase,添加Run Script
     aggregate_target.new_shell_script_build_phase("Run build.sh Script")
+    # 初始化build.sh
+    write_shell(project_name + "Binary")
+    # 设置shell_script内容
     aggregate_target.shell_script_build_phases.first.shell_script = "sh ../build.sh"
-    
   end
 
   # 删除原有target
@@ -73,6 +75,15 @@ class Xcode
     aGroup.groups.each do |group|
       removeBuildPhaseFilesRecursively(aTarget, group)
     end
+  end
+
+  # 初始化打包shell脚本内容
+  def write_shell(target_name)
+    # 打开组件主目录
+
+    # 新建shell脚本
+
+    # 写入打包代码
   end
 
 end
