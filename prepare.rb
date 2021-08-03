@@ -6,7 +6,7 @@ class Xcode
   end
 
   def process
-    project = Xcodeproj::Project.open("/Users/wuwenqiu/automatic/AutoPack/Example/AutoPack.xcodeproj")
+    project = Xcodeproj::Project.open("/Users/wuwenqiu/PrepareLipo/AutoPack/Example/AutoPack.xcodeproj")
     project_name = File.basename(project.path,".xcodeproj")
     process_binary_target(project, project_name)
     process_aggregate_target(project, project_name)
@@ -44,6 +44,9 @@ class Xcode
     del_target(project, target_name)
     # 新建aggregate target
     aggregate_target = project.new_aggregate_target(target_name)
+    # 设置Build Phase,添加Run Script
+    aggregate_target.new_shell_script_build_phase("Run build.sh Script")
+    aggregate_target.shell_script_build_phases.first.shell_script = "sh ../build.sh"
   end
 
   # 删除原有target
