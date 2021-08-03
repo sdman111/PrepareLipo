@@ -1,0 +1,6 @@
+framework module AutoPack {
+  umbrella header "AutoPack-umbrella.h"
+
+  export *
+  module * { export * }
+}

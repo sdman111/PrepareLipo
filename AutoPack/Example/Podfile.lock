@@ -1,0 +1,16 @@
+PODS:
+  - AutoPack (0.1.0)
+
+DEPENDENCIES:
+  - AutoPack (from `../`)
+
+EXTERNAL SOURCES:
+  AutoPack:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  AutoPack: b2a7c77f2f3222a2c0bdfc8e82c050b5e2c05f21
+
+PODFILE CHECKSUM: 4d5a988971e00756074db96988518aa8d712ee53
+
+COCOAPODS: 1.10.1

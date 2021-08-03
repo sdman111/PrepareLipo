@@ -1,0 +1,6 @@
+use_frameworks!
+target 'AutoPack_Tests' do
+  pod 'AutoPack', :path => '../'
+  
+  
+end
