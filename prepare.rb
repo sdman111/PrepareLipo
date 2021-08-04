@@ -1,12 +1,14 @@
 require 'xcodeproj'
 require 'pathname'
-class Xcode
-  def initialize()
+require 'optparse'
 
+class Xcode
+  def initialize(path)
+    @path = path
   end
 
   def process
-    project = Xcodeproj::Project.open("/Users/wuwenqiu/PrepareLipo/AutoPack/Example/AutoPack.xcodeproj")
+    project = Xcodeproj::Project.open(@path)
     project_name = File.basename(project.path,".xcodeproj")
     process_binary_target(project, project_name)
     process_aggregate_target(project, project_name)
@@ -41,6 +43,11 @@ class Xcode
     source_files.each do |file|
       file_ref = group.new_reference(file)
       binary_target.add_file_references([file_ref])
+    end
+    # 新建Binary目录保存打包文件
+    binary_folder = project.project_dir.join target_name
+    unless Dir.exist? binary_folder
+      Dir.mkdir binary_folder
     end
   end
 
@@ -165,4 +172,13 @@ EOF
 
 end
 
-Xcode.new().process
+options = {}
+option_parser = OptionParser.new do |opts|
+  opts.banner = '命令行帮助信息'
+  opts.on('-p xcodeproj_path', '--podfile xcodeproj_path', 'Where the xcodeproj is 必要参数:组件xcodeproj的绝对路径') do |value|
+    options[:path] = value
+  end
+end.parse!
+
+processor = Xcode.new(options[:path])
+processor.process
