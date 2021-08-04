@@ -19,11 +19,18 @@ class Xcode
     # 删除二进制target
     del_target(project, target_name)
     # 新建二进制target
-    binary_target = project.new_target(:static_library, target_name, :ios)
+    binary_target = project.new_target(:static_library, target_name, :ios, nil, project.products_group)
+    # 设置product name(修改target的build settings)
+    binary_target.build_configurations.each { |build_configuration|
+      # 获取build settings
+      build_settings = build_configuration.build_settings
+      # 设置product name
+      build_settings["PRODUCT_NAME"] = target_name
+    }
     # 递归获取所有源文件
     source_files = Dir.glob(project.project_dir.parent.join("#{project_name}/Classes/**/*.{h,m}"))
     # 二进制target新建group引用源文件
-    group = project.main_group.find_subpath(File.join(target_name, 'BinaryGroup'), true)
+    group = project.main_group.find_subpath(File.join(target_name, ''), true)
     # 清空原有group引用
     unless group.empty?
       removeBuildPhaseFilesRecursively(binary_target, group)
@@ -120,7 +127,7 @@ list_files ()
     filelist=$(ls "$1")
     while read line
     do
-        eval "$2[\${\#$2[*]}]=\"\$line\""
+        eval "$2[\\${\#$2[*]}]=\\"\\$line\\""
     done <<< "$filelist"
 }
 ### Take build target.
